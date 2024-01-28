@@ -10,10 +10,10 @@ public class ClientNetworkTransform : NetworkTransform
 
     protected override void Update()
     {
-        base.Update();
         CanCommitToTransform = IsOwner;
+        base.Update();
 
-        if (NetworkManager != null)
+        if (!IsHost && NetworkManager != null)
         {
             if (NetworkManager.IsConnectedClient || NetworkManager.IsListening)
             {

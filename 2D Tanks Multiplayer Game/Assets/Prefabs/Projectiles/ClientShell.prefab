@@ -52,6 +52,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClientShell
       objectReference: {fileID: 0}
+    - target: {fileID: 4458833470786673253, guid: ef75dd2bd3e22984792a92f2e7f0915d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4851259133066689320, guid: ef75dd2bd3e22984792a92f2e7f0915d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

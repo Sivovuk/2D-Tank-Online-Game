@@ -57,12 +57,48 @@ public class ProjectileLauncher : NetworkBehaviour {
         if(!IsOwner) return;
 
         if(!_shouldFire) return;
+        
+        if (Time.time < (1 / _fireRate) + _previousFireTime) { return; }
 
         PrimaryFireServerRPC(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
 
         SpawnDummyProjectile(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
+        
+        _previousFireTime = Time.time;
+
     }
 
+    [ServerRpc]
+    private void PrimaryFireServerRPC(Vector3 spawnPosition, Vector3 direction)
+    {
+        GameObject projectileSpawn = Instantiate(_serverProjectilePrefab, spawnPosition, Quaternion.identity);
+
+        projectileSpawn.transform.up = direction;
+
+        Physics2D.IgnoreCollision(_playerCollider, projectileSpawn.GetComponent<Collider2D>());
+
+        if (projectileSpawn.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact dealDamage))
+        {
+            dealDamage.SetOwner(OwnerClientId);
+        }
+
+        if(projectileSpawn.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        {
+            rb.velocity = rb.transform.up * _projectileSpeed;
+        }
+
+        SpawnDummyProjectileClientRPC(spawnPosition, direction);
+    }
+
+    [ClientRpc]
+    private void SpawnDummyProjectileClientRPC(Vector3 spawnPosition, Vector3 direction)
+    {
+        if(IsOwner) return;
+
+        SpawnDummyProjectile(spawnPosition, direction);
+    }
+    
+    
     private void SpawnDummyProjectile(Vector3 spawnPosition, Vector3 direction)
     {
         _muzzleFlash.SetActive(true);
@@ -80,28 +116,4 @@ public class ProjectileLauncher : NetworkBehaviour {
         }
     }
 
-    [ServerRpc]
-    private void PrimaryFireServerRPC(Vector3 spawnPosition, Vector3 direction)
-    {
-        GameObject projectileSpawn = Instantiate(_serverProjectilePrefab, spawnPosition, Quaternion.identity);
-
-        projectileSpawn.transform.up = direction;
-
-        Physics2D.IgnoreCollision(_playerCollider, projectileSpawn.GetComponent<Collider2D>());
-
-        if(projectileSpawn.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-        {
-            rb.velocity = rb.transform.up * _projectileSpeed;
-        }
-
-        SpawnDummyProjectileClientRPC(spawnPosition, direction);
-    }
-
-    [ClientRpc]
-    private void SpawnDummyProjectileClientRPC(Vector3 spawnPosition, Vector3 direction)
-    {
-        if(IsOwner) return;
-
-        SpawnDummyProjectile(spawnPosition, direction);
-    }
 }
