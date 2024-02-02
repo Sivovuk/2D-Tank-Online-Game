@@ -27,7 +27,6 @@ public class HealthDisplay : NetworkBehaviour
 
     private void HandleHealthChange(int oldHealth, int newHealth)
     {
-        Debug.Log("Health change");
         _healthBarImage.fillAmount = (float)newHealth / _health.MaxHealth;
     }
 }

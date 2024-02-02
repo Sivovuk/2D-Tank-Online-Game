@@ -23,7 +23,6 @@ public class Health : NetworkBehaviour
 
     public void TakeDamage(int damageValue)
     {
-        Debug.Log(gameObject.name);
         ModifyHealth(-damageValue);
     }
 
@@ -35,15 +34,12 @@ public class Health : NetworkBehaviour
     public void ModifyHealth(int value)
     {
         if (isDead) return;
-        Debug.Log("1");
 
         int newHealth = CurrentHealth.Value + value;
         CurrentHealth.Value = Mathf.Clamp(newHealth, 0, MaxHealth);
 
-        Debug.Log("2");
         if (CurrentHealth.Value == 0)
         {
-            Debug.Log("3");
             isDead = true;
             OnDie?.Invoke(this);
         }

@@ -9,18 +9,23 @@ public class ProjectileLauncher : NetworkBehaviour {
     [Header("References")] 
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _projectileSpawnPoint;
-    [SerializeField] private GameObject _serverProjectilePrefab;
-    [SerializeField] private GameObject _clientProjectilePrefab;
+    [SerializeField] private GameObject _serverProjectileAntyPrefab;
+    [SerializeField] private GameObject _clientProjectileAntyPrefab;
+    [SerializeField] private GameObject _serverProjectilePeircingPrefab;
+    [SerializeField] private GameObject _clientProjectilePeircingPrefab;
     [SerializeField] private GameObject _muzzleFlash;
     [SerializeField] private Collider2D _playerCollider;
+    [SerializeField] private CoinWallet _coinWallet;
+    [SerializeField] private ShellSelection _shellSelection;
 
     [Header("Settings")]
     [SerializeField] private float _projectileSpeed = 5;
     [SerializeField] private float _fireRate;
     [SerializeField] private float _muzzleFlashDuration;
+    [SerializeField] private int _costToFire;
 
     private bool _shouldFire;
-    private float _previousFireTime;
+    private float _timer;
     private float _muzzleFlashTimer;
 
     public override void OnNetworkSpawn()
@@ -56,22 +61,31 @@ public class ProjectileLauncher : NetworkBehaviour {
 
         if(!IsOwner) return;
 
+        if(_timer > 0)
+            _timer -= Time.deltaTime;
+        
         if(!_shouldFire) return;
         
-        if (Time.time < (1 / _fireRate) + _previousFireTime) { return; }
+        if (_timer > 0) { return; }
+        
+        if(_coinWallet.TotalCoins.Value < _shellSelection.GetActiveShellCost()) return;
 
         PrimaryFireServerRPC(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
 
         SpawnDummyProjectile(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
         
-        _previousFireTime = Time.time;
+        _timer = 1 / _fireRate;
 
     }
 
     [ServerRpc]
     private void PrimaryFireServerRPC(Vector3 spawnPosition, Vector3 direction)
     {
-        GameObject projectileSpawn = Instantiate(_serverProjectilePrefab, spawnPosition, Quaternion.identity);
+        if (_coinWallet.TotalCoins.Value < _shellSelection.GetActiveShellCost()) return;
+        
+        _coinWallet.SpendCoins(_shellSelection.GetActiveShellCost());
+        
+        GameObject projectileSpawn = Instantiate(GetShellTypeServer(), spawnPosition, Quaternion.identity);
 
         projectileSpawn.transform.up = direction;
 
@@ -104,7 +118,7 @@ public class ProjectileLauncher : NetworkBehaviour {
         _muzzleFlash.SetActive(true);
         _muzzleFlashTimer = _muzzleFlashDuration;
 
-        GameObject projectileSpawn = Instantiate(_clientProjectilePrefab, spawnPosition, Quaternion.identity);
+        GameObject projectileSpawn = Instantiate(GetShellTypeClient(), spawnPosition, Quaternion.identity);
 
         projectileSpawn.transform.up = direction;
         
@@ -116,4 +130,27 @@ public class ProjectileLauncher : NetworkBehaviour {
         }
     }
 
+    private GameObject GetShellTypeClient()
+    {
+        if (_shellSelection.GetActiveShell() == TankShells.AntyTankShell)
+        {
+            return _clientProjectileAntyPrefab;
+        }
+        else
+        {
+            return _clientProjectilePeircingPrefab;
+        }
+    }
+    
+    private GameObject GetShellTypeServer()
+    {
+        if (_shellSelection.GetActiveShell() == TankShells.AntyTankShell)
+        {
+            return _serverProjectileAntyPrefab;
+        }
+        else
+        {
+            return _serverProjectilePeircingPrefab;
+        }
+    }
 }
