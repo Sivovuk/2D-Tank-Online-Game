@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Networking.Client;
 using TMPro;
 using Unity.Services.Authentication;
 using UnityEngine;

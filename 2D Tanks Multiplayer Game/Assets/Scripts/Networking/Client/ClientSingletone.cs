@@ -4,41 +4,50 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-//  this class is creating and storing client instance
-public class ClientSingletone : MonoBehaviour
+namespace Networking.Client
 {
-   public ClientGameManager ClientGameManager { get; private set; }
-
-   private static ClientSingletone _instance;
-
-   public static ClientSingletone Instance
+//  this class is creating and storing client instance
+   public class ClientSingletone : MonoBehaviour
    {
-      get
+      public ClientGameManager ClientGameManager { get; private set; }
+
+      private static ClientSingletone _instance;
+
+      public static ClientSingletone Instance
       {
-         if (_instance != null) return _instance;
-
-         _instance = FindObjectOfType<ClientSingletone>();
-
-         if (_instance == null)
+         get
          {
-            Debug.LogError("No client instance in the scene");
-            return null;
+            if (_instance != null) return _instance;
+
+            _instance = FindObjectOfType<ClientSingletone>();
+
+            if (_instance == null)
+            {
+               Debug.LogError("No client instance in the scene");
+               return null;
+            }
+
+            return _instance;
          }
-
-         return _instance;
       }
-   }
-   private void Start()
-   {
-      DontDestroyOnLoad(gameObject);
-   }
 
-   public async Task<bool> CreateClient()
-   {
-      ClientGameManager = new ClientGameManager();
+      private void Start()
+      {
+         DontDestroyOnLoad(gameObject);
+      }
 
-      return await ClientGameManager.InitAsync();
-      
-      
+      public async Task<bool> CreateClient()
+      {
+         ClientGameManager = new ClientGameManager();
+
+         return await ClientGameManager.InitAsync();
+
+
+      }
+
+      private void OnDestroy()
+      {
+         ClientGameManager?.Dispose();
+      }
    }
 }

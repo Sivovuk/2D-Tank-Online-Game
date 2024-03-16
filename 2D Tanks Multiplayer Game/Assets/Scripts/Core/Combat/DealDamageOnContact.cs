@@ -17,7 +17,6 @@ public class DealDamageOnContact : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider2D)
     {
-        Debug.LogError(gameObject.name);
         if(collider2D.attachedRigidbody == null) return;
 
         if (collider2D.attachedRigidbody.TryGetComponent<NetworkObject>(out var netObj))

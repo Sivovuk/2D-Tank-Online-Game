@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Networking.Client;
 using UnityEngine;
 
 //  ApplicationController is the main scripts for setting up Server, Host and Client side
@@ -37,7 +38,7 @@ public class ApplicationController : MonoBehaviour
 
             if (authentication)
             {
-                clientSingletone.ClientGameManager.GoToMenu();
+                GameManager.SceneController.LoadScene(SceneController.MAIN_MENU_SCENE);
             }
         }
     }
