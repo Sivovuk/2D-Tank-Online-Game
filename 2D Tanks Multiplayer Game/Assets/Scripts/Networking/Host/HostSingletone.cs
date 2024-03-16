@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+//  this class is creating and storing host instance
 public class HostSingletone : MonoBehaviour
 {
-    private HostGameManager _clientGameManager;
+    public HostGameManager HostGameManager;
    
-    private static HostSingletone instance;
+    private static HostSingletone _instance;
 
     public static HostSingletone Instance
     {
         get
         {
-            if (instance != null) return instance;
+            if (_instance != null) return _instance;
 
-            instance = FindObjectOfType<HostSingletone>();
+            _instance = FindObjectOfType<HostSingletone>();
 
-            if (instance == null)
+            if (_instance == null)
             {
                 Debug.LogError("No host instance in the scene");
                 return null;
             }
 
-            return instance;
+            return _instance;
         }
     }
     private void Start()
@@ -33,6 +34,6 @@ public class HostSingletone : MonoBehaviour
 
     public void CreateHost()
     {
-        _clientGameManager = new HostGameManager();
+        HostGameManager = new HostGameManager();
     }
 }

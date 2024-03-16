@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using Unity.Services.Authentication;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private TMP_InputField _jointCodeField;
+    
+    public async void StartHost()
     {
-        
+        await HostSingletone.Instance.HostGameManager.StartHostAsync();
     }
 
-    // Update is called once per frame
-    void Update()
+    public async void StartClient()
     {
-        
+        await ClientSingletone.Instance.ClientGameManager.StartClientAsync(_jointCodeField.text);
     }
 }
