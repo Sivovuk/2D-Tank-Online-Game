@@ -21,6 +21,11 @@ namespace Networking.Client
         {
             if(clientID != 0 && clientID != _networkManager.LocalClientId) return;
 
+            Disconnect();
+        }
+        
+        public void Disconnect()
+        {
             if (!GameManager.SceneController.IsActiveScene(SceneController.MAIN_MENU_SCENE))
             {
                 GameManager.SceneController.LoadScene(SceneController.MAIN_MENU_SCENE);
@@ -38,5 +43,6 @@ namespace Networking.Client
             
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         }
+
     }
 }

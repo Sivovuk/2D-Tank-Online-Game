@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -11,10 +12,19 @@ namespace Core.Player
     {
         [Header("References")] [SerializeField]
         private CinemachineVirtualCamera _followCamera;
+        [SerializeField] private SpriteRenderer _minimapIcon;
 
-        [Header("Settings")] [SerializeField] private int _ownerPriority = 15;
+        [field:SerializeField] public Health Health { get; private set; }
+        [field:SerializeField] public CoinWallet Wallet { get; private set; }
+
+        [Header("Settings")] 
+        [SerializeField] private int _ownerPriority = 15;
+        [SerializeField] private Color _minimapIconColor;
 
         public NetworkVariable<FixedString32Bytes> PlayerName = new NetworkVariable<FixedString32Bytes>();
+
+        public static event Action<TankPlayer> OnPlayerSpawned;
+        public static event Action<TankPlayer> OnPlayerDespawned; 
 
         public override void OnNetworkSpawn()
         {
@@ -23,11 +33,22 @@ namespace Core.Player
                 UserData userData =
                     HostSingletone.Instance.HostGameManager.NetworkServer.GetUserDataByClientID(OwnerClientId);
                 PlayerName.Value = userData.UserName;
+                
+                OnPlayerSpawned?.Invoke(this);
             }
 
             if (IsOwner)
             {
                 _followCamera.Priority = _ownerPriority;
+                _minimapIcon.color = _minimapIconColor;
+            }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsServer)
+            {
+                OnPlayerDespawned?.Invoke(this);
             }
         }
     }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2951261829276647520
+--- !u!1001 &7936181392628136454
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 712382768953316328, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.53286135
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 712382768953316328, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.151023
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 712382768953316328, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17267236
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 712382768953316328, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -50,11 +50,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1559075445215429745, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: m_Name
-      value: RespawningCoin
+      value: BountyCoin
       objectReference: {fileID: 0}
+    - target: {fileID: 2099907692821244722, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7bfd0a0977e81b84a8f1d12195e5883a, type: 3}
     - target: {fileID: 6785724476858866256, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2201773341
+      value: 781487277
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,61 +66,28 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1559075445215429745, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -8042601731066395683}
-    - targetCorrespondingSourceObject: {fileID: 1559075445215429745, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4786061446488761520}
+      addedObject: {fileID: 8348464552185953276}
   m_SourcePrefab: {fileID: 100100000, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
---- !u!212 &3877777490085423954 stripped
+--- !u!212 &8288492511896424756 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2099907692821244722, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
-  m_PrefabInstance: {fileID: 2951261829276647520}
+  m_PrefabInstance: {fileID: 7936181392628136454}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4419735632749642769 stripped
+--- !u!1 &8899121894502153847 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1559075445215429745, guid: 7ae4ca64e4025da4c801ce255ce0f1bd, type: 3}
-  m_PrefabInstance: {fileID: 2951261829276647520}
+  m_PrefabInstance: {fileID: 7936181392628136454}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-8042601731066395683
+--- !u!114 &8348464552185953276
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4419735632749642769}
+  m_GameObject: {fileID: 8899121894502153847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9950188278deafc4ea1950110e738bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 0
-  SlerpPosition: 0
---- !u!114 &4786061446488761520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4419735632749642769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0515748d6d7febb44b5d613847f4d5e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 3877777490085423954}
+  _spriteRenderer: {fileID: 8288492511896424756}
