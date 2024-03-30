@@ -9,11 +9,11 @@ using UnityEngine;
 
 public class LobbiesList : MonoBehaviour
 {
+    [SerializeField] private MainMenu _mainMenu;
     [SerializeField] private Transform _lobbyItemParent;
     [SerializeField] private LobbyItem _lobbyItemPrefab;
     
-    private Lobby _joiningLobby;
-    private bool isJoining;
+    private bool isRefreshing;
 
     private void OnEnable()
     {
@@ -22,8 +22,8 @@ public class LobbiesList : MonoBehaviour
 
     public async void RefreshList()
     {
-        if (isJoining) return;
-        isJoining = true;
+        if (isRefreshing) return;
+        isRefreshing = true;
 
         try
         {
@@ -64,27 +64,11 @@ public class LobbiesList : MonoBehaviour
             Debug.Log(e);
         }
         
-
-        isJoining = false;
+        isRefreshing = false;
     }
 
-    public async void JoinAsync(Lobby lobby)
+    public void JoinAsync(Lobby lobby)
     {
-        if (isJoining) return;
-        isJoining = true;
-        
-        try
-        {
-             _joiningLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobby.Id);
-             string joinCode = _joiningLobby.Data["JoinCode"].Value;
-
-             await ClientSingletone.Instance.ClientGameManager.StartClientAsync(joinCode);
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.Log(e);
-        }
-
-        isJoining = false;
+        _mainMenu.JoinAsync(lobby);
     }
 }

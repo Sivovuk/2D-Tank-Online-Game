@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
+
+    public Action<UserData> OnUserJoined;
+    public Action<UserData> OnUserLeft;
 
     public Action<string> OnClientLeft;
 
@@ -21,6 +25,13 @@ public class NetworkServer : IDisposable
         _networkManager.OnServerStarted += OnNetworkReady;
     }
 
+    public bool OpenConnection(string IP, int port)
+    {
+        UnityTransport transport = _networkManager.gameObject.GetComponent<UnityTransport>();
+        transport.SetConnectionData(IP, (ushort)port);
+        return _networkManager.StartServer();
+    }
+
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
         string payload = System.Text.Encoding.UTF8.GetString(request.Payload);
@@ -28,6 +39,7 @@ public class NetworkServer : IDisposable
         
         _clientsIDToAuth[request.ClientNetworkId] = userData.UserAuthID;
         _authIDToUserData[userData.UserAuthID] = userData;
+        OnUserJoined?.Invoke(userData);
 
         response.Approved = true;
         response.Position = SpawnPoint.GetRandomSpawnPos();
@@ -45,6 +57,7 @@ public class NetworkServer : IDisposable
         if (_clientsIDToAuth.TryGetValue(clientID, out string authID))
         {
             _clientsIDToAuth.Remove(clientID);
+            OnUserLeft?.Invoke(_authIDToUserData[authID]);
             _authIDToUserData.Remove(authID);
             OnClientLeft?.Invoke(authID);
         }

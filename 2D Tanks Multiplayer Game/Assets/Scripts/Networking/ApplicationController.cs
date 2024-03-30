@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DefaultNamespace.Networking.Server;
 using Networking.Client;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class ApplicationController : MonoBehaviour
 {
     [SerializeField] private ClientSingletone _clientPrefab;
     [SerializeField] private HostSingletone _hostPrefab;
+    [SerializeField] private ServerSingletone _serverPrefab;
+
+    private ApplicationData _applicationData;
     
     private async void Start()
     {
@@ -25,7 +29,12 @@ public class ApplicationController : MonoBehaviour
         //  proveravamo ako je server onda samo izvrsamo serverski stranu koda
         if (isDedicatedServer)
         {
+            _applicationData = new ApplicationData();
             
+            ServerSingletone serverSingletone = Instantiate(_serverPrefab);
+            await serverSingletone.CreateServer();
+
+             await serverSingletone.ServerGameManager.StartServerAsync();
         }
         //  ako ne onda izvrsavamo Client i Host stranu koda
         else

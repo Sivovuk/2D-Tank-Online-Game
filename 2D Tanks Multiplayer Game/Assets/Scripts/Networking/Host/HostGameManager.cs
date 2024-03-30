@@ -115,21 +115,21 @@ public class HostGameManager : IDisposable
 
     public async void Shutdown()
     {
+
+        if (string.IsNullOrEmpty(_lobbyID)) return;
+        
         HostSingletone.Instance.StopCoroutine(nameof(HeartbeatLobby));
-
-        if (string.IsNullOrEmpty(_lobbyID))
+        
+        try
         {
-            try
-            {
-                await Lobbies.Instance.DeleteLobbyAsync(_lobbyID);
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
-
-            _lobbyID = string.Empty;
+            await Lobbies.Instance.DeleteLobbyAsync(_lobbyID);
         }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+
+        _lobbyID = string.Empty;
         
         NetworkServer.OnClientLeft += HandleClientLeft;
         
