@@ -23,7 +23,7 @@ namespace Networking.Client
 
             if (_instance == null)
             {
-               Debug.LogError("No client instance in the scene");
+               Debug.LogWarning("No client instance in the scene");
                return null;
             }
 

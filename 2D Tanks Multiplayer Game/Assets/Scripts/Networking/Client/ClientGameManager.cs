@@ -85,13 +85,14 @@ namespace Networking.Client
             NetworkManager.Singleton.StartClient();
         }
 
-        public async void MatchmakeAsync(Action<MatchmakerPollingResult> onMatchmakeResponse)
+        public async void MatchmakeAsync(bool isTeamQueue, Action<MatchmakerPollingResult> onMatchmakeResponse)
         {
             if (_matchmaker.IsMatchmaking)
             {
                 return;
             }
 
+            _userData.UserGamePreferences.GameQueue = isTeamQueue ? GameQueue.Team : GameQueue.Solo;
             MatchmakerPollingResult matchmakerPollingResult = await GetMatchAsync();
             onMatchmakeResponse?.Invoke(matchmakerPollingResult);
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 //  this class is creating and storing host instance
@@ -21,7 +22,7 @@ public class HostSingletone : MonoBehaviour
 
             if (_instance == null)
             {
-                Debug.LogError("No host instance in the scene");
+                Debug.LogWarning("No host instance in the scene");
                 return null;
             }
 
@@ -33,9 +34,9 @@ public class HostSingletone : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void CreateHost()
+    public void CreateHost(NetworkObject playerPrefab)
     {
-        HostGameManager = new HostGameManager();
+        HostGameManager = new HostGameManager(playerPrefab);
     }
 
     private void OnDestroy()

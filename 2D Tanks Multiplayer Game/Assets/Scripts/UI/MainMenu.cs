@@ -8,6 +8,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TMP_Text _queueTimerText;
     [SerializeField] private TMP_Text _findMatchButtonText;
     [SerializeField] private TMP_InputField _jointCodeField;
+    [SerializeField] private Toggle _teamToggle;
+    [SerializeField] private Toggle _privateToggle;
 
     private bool isMatchmaking;
     private bool isCancelling;
@@ -66,7 +69,7 @@ public class MainMenu : MonoBehaviour
 
         if (isBusy) return;
         
-        ClientSingletone.Instance.ClientGameManager.MatchmakeAsync(OnMatchMade);
+        ClientSingletone.Instance.ClientGameManager.MatchmakeAsync(_teamToggle.isOn, OnMatchMade);
         _findMatchButtonText.text = "Cancel";
         _queueStatusText.text = "Searching...";
         _timeInQueue = 0;
@@ -103,7 +106,7 @@ public class MainMenu : MonoBehaviour
         
         isBusy = true;
         
-        await HostSingletone.Instance.HostGameManager.StartHostAsync();
+        await HostSingletone.Instance.HostGameManager.StartHostAsync(_privateToggle.isOn);
         
         isBusy = false;
     }

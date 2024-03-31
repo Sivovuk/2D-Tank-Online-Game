@@ -26,9 +26,9 @@ namespace Networking.Client
         
         public void Disconnect()
         {
-            if (!GameManager.SceneController.IsActiveScene(SceneController.MAIN_MENU_SCENE))
+            if (!SceneController.Instance.IsActiveScene(SceneController.MAIN_MENU_SCENE))
             {
-                GameManager.SceneController.LoadScene(SceneController.MAIN_MENU_SCENE);
+                SceneController.Instance.LoadScene(SceneController.MAIN_MENU_SCENE);
             }
 
             if (_networkManager.IsConnectedClient)

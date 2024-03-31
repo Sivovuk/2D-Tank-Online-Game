@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Services.Matchmaker.Models;
@@ -13,15 +14,17 @@ public class ServerGameManager : IDisposable
 
     private MultiplayAllocationService _multiplayAllocationService;
     private MatchplayBackfiller _matchplayBackfiller;
+
+    private Dictionary<string, int> teamIDToTeamIndex = new Dictionary<string, int>();
     
     public NetworkServer NetworkServer { get; private set; }
     
-    public ServerGameManager(string serverIP, int serverPort, int serverQPort, NetworkManager manager)
+    public ServerGameManager(string serverIP, int serverPort, int serverQPort, NetworkManager manager, NetworkObject playerPrefab)
     {
         _serverIP = serverIP;
         _serverPort = serverPort;
         _queryPort = serverQPort;
-        NetworkServer = new NetworkServer(manager);
+        NetworkServer = new NetworkServer(manager, playerPrefab);
         _multiplayAllocationService = new MultiplayAllocationService();
     }
 
@@ -53,9 +56,6 @@ public class ServerGameManager : IDisposable
         {
             Debug.LogError("Network server not started as expected!");
         }
-        
-        NetworkManager.Singleton.SceneManager.LoadScene(SceneController.GAME_SCENE, LoadSceneMode.Single);
-
     }
 
     private async Task StartBackfilled(MatchmakingResults matchmakingPayload)
@@ -85,7 +85,16 @@ public class ServerGameManager : IDisposable
 
     private void UserJoined(UserData user)
     {
-        _matchplayBackfiller.AddPlayerToMatch(user);
+        Team team = _matchplayBackfiller.GetTeamByUserID(user.UserAuthID);
+        if (!teamIDToTeamIndex.TryGetValue(team.TeamId, out int teamIndex))
+        {
+            teamIndex = teamIDToTeamIndex.Count;
+            teamIDToTeamIndex.Add(team.TeamId, teamIndex);
+        }
+        
+        user.TeamIndex = teamIndex;
+
+        //_matchplayBackfiller.AddPlayerToMatch(user);
         _multiplayAllocationService.AddPlayer();
         if (!_matchplayBackfiller.NeedsPlayers() && _matchplayBackfiller.IsBackfilling)
         {

@@ -70,6 +70,8 @@ namespace UI.Leaderboard
 
         private void HandleLeaderboardEntitiesChange(NetworkListEvent<LeaderboardEntityState> changeEvent)
         {
+            if (!gameObject.scene.isLoaded) return;
+            
             switch (changeEvent.Type)
             {
                 case NetworkListEvent<LeaderboardEntityState>.EventType.Add :
@@ -135,7 +137,7 @@ namespace UI.Leaderboard
 
         private void HandlePlayerDespawn(TankPlayer player)
         {
-            if(_leaderboardEntities == null) return;
+            if(_leaderboardEntities.Count <= 0) return;
             
             foreach (LeaderboardEntityState entity in _leaderboardEntities)
             {

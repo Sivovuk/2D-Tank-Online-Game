@@ -24,6 +24,7 @@ namespace Core.Player
         [SerializeField] private Color _minimapIconColor;
 
         public NetworkVariable<FixedString32Bytes> PlayerName = new NetworkVariable<FixedString32Bytes>();
+        public NetworkVariable<int> TeamIndex = new NetworkVariable<int>();
 
         public static event Action<TankPlayer> OnPlayerSpawned;
         public static event Action<TankPlayer> OnPlayerDespawned; 
@@ -42,6 +43,7 @@ namespace Core.Player
                     userData = ServerSingletone.Instance.ServerGameManager.NetworkServer.GetUserDataByClientID(OwnerClientId);
                 }
                 PlayerName.Value = userData.UserName;
+                TeamIndex.Value = userData.TeamIndex;
                 
                 OnPlayerSpawned?.Invoke(this);
             }
