@@ -1,13 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ProjectileLauncher : NetworkBehaviour {
-   
+public class ProjectileLauncher : NetworkBehaviour
+{
+
     [Header("References")] 
+    [SerializeField] private TankPlayer _player;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _projectileSpawnPoint;
     [SerializeField] private GameObject _serverProjectileAntyPrefab;
@@ -23,9 +23,8 @@ public class ProjectileLauncher : NetworkBehaviour {
     [SerializeField] private float _projectileSpeed = 5;
     [SerializeField] private float _fireRate;
     [SerializeField] private float _muzzleFlashDuration;
-    [SerializeField] private int _costToFire;
 
-    private bool isPointerOverUI;
+    private bool _isPointerOverUI;
     private bool _shouldFire;
     private float _timer;
     private float _muzzleFlashTimer;
@@ -46,9 +45,9 @@ public class ProjectileLauncher : NetworkBehaviour {
 
     private void HandlePrimaryFire(bool shouldFire)
     {
-        if (isPointerOverUI) return;
+        if (_isPointerOverUI) return;
         
-        this._shouldFire = shouldFire;
+        _shouldFire = shouldFire;
     }
 
     void Update()
@@ -65,7 +64,7 @@ public class ProjectileLauncher : NetworkBehaviour {
 
         if(!IsOwner) return;
 
-        isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+        _isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
 
         if(_timer > 0)
             _timer -= Time.deltaTime;
@@ -78,7 +77,7 @@ public class ProjectileLauncher : NetworkBehaviour {
 
         PrimaryFireServerRPC(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
 
-        SpawnDummyProjectile(_projectileSpawnPoint.position, _projectileSpawnPoint.up);
+        SpawnDummyProjectile(_projectileSpawnPoint.position, _projectileSpawnPoint.up, _player.TeamIndex.Value);
         
         _timer = 1 / _fireRate;
 
@@ -97,29 +96,29 @@ public class ProjectileLauncher : NetworkBehaviour {
 
         Physics2D.IgnoreCollision(_playerCollider, projectileSpawn.GetComponent<Collider2D>());
 
-        if (projectileSpawn.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact dealDamage))
+        if (projectileSpawn.TryGetComponent<Projectile>(out Projectile projectile))
         {
-            dealDamage.SetOwner(OwnerClientId);
+            projectile.Initialise(_player.TeamIndex.Value);
         }
-
+        
         if(projectileSpawn.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
             rb.velocity = rb.transform.up * _projectileSpeed;
         }
 
-        SpawnDummyProjectileClientRPC(spawnPosition, direction);
+        SpawnDummyProjectileClientRPC(spawnPosition, direction, _player.TeamIndex.Value);
     }
 
     [ClientRpc]
-    private void SpawnDummyProjectileClientRPC(Vector3 spawnPosition, Vector3 direction)
+    private void SpawnDummyProjectileClientRPC(Vector3 spawnPosition, Vector3 direction, int teamIndex)
     {
         if(IsOwner) return;
 
-        SpawnDummyProjectile(spawnPosition, direction);
+        SpawnDummyProjectile(spawnPosition, direction, teamIndex);
     }
     
     
-    private void SpawnDummyProjectile(Vector3 spawnPosition, Vector3 direction)
+    private void SpawnDummyProjectile(Vector3 spawnPosition, Vector3 direction, int teamIndex)
     {
         _muzzleFlash.SetActive(true);
         _muzzleFlashTimer = _muzzleFlashDuration;
@@ -130,6 +129,11 @@ public class ProjectileLauncher : NetworkBehaviour {
         
         Physics2D.IgnoreCollision(_playerCollider, projectileSpawn.GetComponent<Collider2D>());
 
+        if(projectileSpawn.TryGetComponent<Projectile>(out Projectile projectile))
+        {
+            projectile.Initialise(teamIndex);
+        }
+        
         if(projectileSpawn.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
             rb.velocity = rb.transform.up * _projectileSpeed;
@@ -138,7 +142,7 @@ public class ProjectileLauncher : NetworkBehaviour {
 
     private GameObject GetShellTypeClient()
     {
-        if (_shellSelection.GetActiveShell() == TankShells.AntyTankShell)
+        if (_shellSelection.GetActiveShell() == ShellSelection.TankShells.AntyTankShell)
         {
             return _clientProjectileAntyPrefab;
         }
@@ -150,7 +154,7 @@ public class ProjectileLauncher : NetworkBehaviour {
     
     private GameObject GetShellTypeServer()
     {
-        if (_shellSelection.GetActiveShell() == TankShells.AntyTankShell)
+        if (_shellSelection.GetActiveShell() == ShellSelection.TankShells.AntyTankShell)
         {
             return _serverProjectileAntyPrefab;
         }

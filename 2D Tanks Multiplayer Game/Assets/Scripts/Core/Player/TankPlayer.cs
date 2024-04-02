@@ -64,5 +64,6 @@ namespace Core.Player
                 OnPlayerDespawned?.Invoke(this);
             }
         }
+        
     }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1343576800166488664}
   - component: {fileID: 6438885399169862869}
-  - component: {fileID: 5053523336892356162}
+  - component: {fileID: 1733164756609217224}
   - component: {fileID: 4059505758256251970}
   m_Layer: 5
   m_Name: Canvas
@@ -62,7 +62,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &5053523336892356162
+--- !u!114 &1733164756609217224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,11 +71,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 954567775327006534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8493782f23734f53b027f6f48dedf6eb, type: 3}
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coinWallet: {fileID: 3253404536187562601}
-  _coinsTMP: {fileID: 1264908189816950726}
+  GlobalObjectIdHash: 899746453
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &4059505758256251970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,11 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf5f74030534541b3f3e6664c6712a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AntyTankShellCost>k__BackingField: 5
-  <PeircingShellCost>k__BackingField: 10
   _antyTankSelecGUI: {fileID: 6251141573933541476}
   _peircingTankSelecGUI: {fileID: 6146298703956564078}
-  _shellSelected: 1
 --- !u!1 &1025982159546490494
 GameObject:
   m_ObjectHideFlags: 0
@@ -9937,6 +9940,7 @@ GameObject:
   - component: {fileID: 7146633961492793953}
   - component: {fileID: 8409468213446740148}
   - component: {fileID: 3253404536187562601}
+  - component: {fileID: 6464979432040566047}
   - component: {fileID: 7065757777552673023}
   m_Layer: 0
   m_Name: Player
@@ -10100,6 +10104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48f108e52813f2419cf1a142e411250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 7065757777552673023}
   _inputReader: {fileID: 11400000, guid: 77859096785652b468fb1daba98db514, type: 2}
   _projectileSpawnPoint: {fileID: 7079395629255191148}
   _serverProjectileAntyPrefab: {fileID: 1318639005303747811, guid: 05716d3f86dfe44458db1a4f72f13146, type: 3}
@@ -10109,11 +10114,10 @@ MonoBehaviour:
   _muzzleFlash: {fileID: 7306713869260134740}
   _playerCollider: {fileID: 201739276862032780}
   _coinWallet: {fileID: 3253404536187562601}
-  _shellSelection: {fileID: 4059505758256251970}
+  _shellSelection: {fileID: 6464979432040566047}
   _projectileSpeed: 50
   _fireRate: 2
   _muzzleFlashDuration: 0.075
-  _costToFire: 5
 --- !u!114 &8409468213446740148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10152,7 +10156,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   TotalCoins:
-    m_InternalValue: 1000
+    m_InternalValue: 0
+--- !u!114 &6464979432040566047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984893570898418700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c496d66fc30a1499aeb462ba29f28d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShellSelected:
+    m_InternalValue: 1
+  <AntyTankShellCost>k__BackingField: 5
+  <PeircingShellCost>k__BackingField: 10
 --- !u!114 &7065757777552673023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17024,6 +17044,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4418472348845192375}
     m_Modifications:
+    - target: {fileID: 1173675015602516768, guid: d9a2407d526c99b44a2a7144e53c02da, type: 3}
+      propertyPath: _coinWallet
+      value: 
+      objectReference: {fileID: 3253404536187562601}
     - target: {fileID: 3067937766901513841, guid: d9a2407d526c99b44a2a7144e53c02da, type: 3}
       propertyPath: _player
       value: 
@@ -17130,14 +17154,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4121761318608613421, guid: d9a2407d526c99b44a2a7144e53c02da, type: 3}
   m_PrefabInstance: {fileID: 4118520409388077118}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1264908189816950726 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2930215213401661432, guid: d9a2407d526c99b44a2a7144e53c02da, type: 3}
-  m_PrefabInstance: {fileID: 4118520409388077118}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -68,13 +68,13 @@ public class CoinWallet : NetworkBehaviour
 
         if (bountyCoinValue < _minBountyCoinValue)
         {
-            return;
+            bountyCoinValue = _minBountyCoinValue;
         }
 
         for (int i = 0; i < _bountyCoinCount; i++)
         {
             BountyCoin coin = Instantiate(_coinPrefab, GetSpawnPoint(), Quaternion.identity);
-            coin.SetValue(bountyValue);
+            coin.SetValue(bountyCoinValue);
             coin.NetworkObject.Spawn();
         }
     }

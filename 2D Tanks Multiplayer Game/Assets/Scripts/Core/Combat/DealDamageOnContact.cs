@@ -1,36 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
 
-public class DealDamageOnContact : NetworkBehaviour
+public class DealDamageOnContact : MonoBehaviour
 {
+    [SerializeField] private Projectile _projectile;
     [SerializeField] private int _damage = 5;
-
-    private ulong ownerClientID;
-    
-    public void SetOwner(ulong ownerClientID)
-    {
-        this.ownerClientID = ownerClientID;
-    }
 
     private void OnTriggerEnter2D(Collider2D collider2D)
     {
         if(collider2D.attachedRigidbody == null) return;
 
-        if (collider2D.attachedRigidbody.TryGetComponent<NetworkObject>(out var netObj))
+        if (_projectile.TeamIndex != -1)
         {
-            if (ownerClientID == netObj.OwnerClientId)
+            if (collider2D.attachedRigidbody.TryGetComponent<TankPlayer>(out TankPlayer player))
             {
-                Debug.Log("Isti objekat");
-                return;
+                if (_projectile.TeamIndex == player.TeamIndex.Value)
+                {
+                    return;
+                }
             }
         }
 
         if (collider2D.attachedRigidbody.TryGetComponent<Health>(out Health health))
         {
-            Debug.Log("Pogodjen drugi objekat");
             health.TakeDamage(_damage);
         }
     }

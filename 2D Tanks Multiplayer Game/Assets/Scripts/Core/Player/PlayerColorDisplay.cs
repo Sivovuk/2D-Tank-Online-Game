@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using Core.Player;
-using Unity.Collections;
-using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerColorDisplay : MonoBehaviour
@@ -20,9 +16,10 @@ public class PlayerColorDisplay : MonoBehaviour
 
     private void HandlePlayerNameChange(int oldIndex, int newIndex)
     {
+        Color32 color = _colorLookup.GetTeamColor(newIndex);
         foreach (var part in _playerParts)
         {
-            part.color = _colorLookup.GetTeamColor(newIndex);
+            part.color = color;
         }
     }
 

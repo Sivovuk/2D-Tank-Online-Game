@@ -409,6 +409,7 @@ GameObject:
   - component: {fileID: 3230934925333419110}
   - component: {fileID: 3067937766901513841}
   - component: {fileID: 3769392105649037140}
+  - component: {fileID: 1173675015602516768}
   m_Layer: 5
   m_Name: OverheadCanvas
   m_TagString: Untagged
@@ -510,6 +511,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
   _playerNameTMP: {fileID: 7341135497369815333}
+--- !u!114 &1173675015602516768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128506069031037781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8493782f23734f53b027f6f48dedf6eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coinWallet: {fileID: 0}
+  _coinsTMP: {fileID: 2930215213401661432}
 --- !u!1 &7090972070986742896
 GameObject:
   m_ObjectHideFlags: 0
